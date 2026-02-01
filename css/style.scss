@@ -1,0 +1,581 @@
+$bg1: #0b1020;
+$bg2: #121a2f;
+$card: rgba(255, 255, 255, 0.12);
+$cardBorder: rgba(255, 255, 255, 0.18);
+$white: #fff;
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: radial-gradient(1200px 700px at 50% 35%, $bg2, $bg1);
+  color: $white;
+  overflow: hidden;
+}
+
+.scene {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.stage {
+  position: relative;
+  width: min(520px, 92vw);
+  height: min(520px, 70vh);
+  display: grid;
+  place-items: end center;
+}
+
+.hint {
+  opacity: 0.45;
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+.prompt-card {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: $card;
+  border: 1px solid $cardBorder;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  transition: opacity 600ms ease, transform 600ms ease;
+  z-index: 50;
+
+  &.is-hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+    pointer-events: none;
+  }
+}
+
+.cake-wrap {
+  position: relative;
+  width: 360px;
+  height: 380px;
+  display: grid;
+  place-items: end center;
+}
+
+.floor {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  width: 360px;
+  height: 6px;
+  transform: translateX(-50%);
+  opacity: 0; // invisibile come richiesto
+}
+
+.cake {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 180px;
+  z-index: 10;
+
+  .cake-half {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    border-radius: 26px;
+    background: linear-gradient(180deg, #ffb3c8, #ff8fb4);
+    box-shadow: inset 0 -12px 0 rgba(0,0,0,0.06), 0 20px 30px rgba(0,0,0,0.35);
+
+    &--top {
+      top: 0;
+      width: 60%;
+      left: 63px;
+      transform-origin: 50% 100%;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+    }
+
+    &--bottom {
+      bottom: 0;
+      transform-origin: 50% 0%;
+      background: linear-gradient(180deg, #ff86b0, #ff5c96);
+      transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+    }
+  }
+
+  .icing {
+    position: absolute;
+    top: 24px;
+    left: 62px;
+    width: 194px;
+    height: 36px;
+    background: rgba(255,255,255,0.72);
+    border-radius: 20px;
+    filter: blur(0.2px);
+    box-shadow: inset 0 -8px 0 rgba(0,0,0,0.05);
+  }
+
+  .sprinkles {
+    position: absolute;
+    top: 34px;
+    left: 48px;
+    width: 245px;
+    height: 22px;
+    background:
+      radial-gradient(circle at 8% 60%, #7ef, transparent 8px),
+      radial-gradient(circle at 22% 30%, #ffd86b, transparent 8px),
+      radial-gradient(circle at 36% 65%, #b6ff7e, transparent 8px),
+      radial-gradient(circle at 52% 35%, #ff79c6, transparent 8px),
+      radial-gradient(circle at 68% 70%, #9b8cff, transparent 8px),
+      radial-gradient(circle at 82% 30%, #ffb86c, transparent 8px);
+    opacity: 0.9;
+    mix-blend-mode: screen;
+  }
+
+  .candles {
+    position: absolute;
+    top: -34px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 14px;
+    z-index: 20;
+
+    .candle {
+      width: 10px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #fff, #ffd1e1);
+      position: relative;
+      box-shadow: 0 8px 14px rgba(0,0,0,0.25);
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 2px;
+        width: 6px;
+        height: 2px;
+        background: rgba(255, 105, 180, 0.7);
+        border-radius: 3px;
+      }
+
+      .flame {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        width: 12px;
+        height: 18px;
+        transform: translateX(-50%);
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        background: radial-gradient(circle at 50% 35%, #fff 0 25%, #ffd36b 26% 55%, #ff7b2e 56% 100%);
+        filter: drop-shadow(0 0 12px rgba(255, 186, 73, 0.65));
+        animation: flameFlicker 350ms infinite alternate ease-in-out;
+        transform-origin: 50% 90%;
+      }
+    }
+
+    &.is-out {
+      .flame {
+        opacity: 0;
+        animation: none;
+        filter: none;
+        transform: translateX(-50%) scale(0.6);
+        transition: opacity 500ms ease, transform 500ms ease;
+      }
+    }
+  }
+
+  &.is-open {
+    .candle {
+      top: 19px;
+    }
+    .cake-half--top { transform: translateY(-26px) rotateX(60deg); }
+    .cake-half--bottom { transform: translateY(26px) rotateX(-60deg); }
+  }
+}
+
+@keyframes flameFlicker {
+  from { transform: translateX(-50%) rotate(-3deg) scale(0.98); }
+  to   { transform: translateX(-50%) rotate(3deg)  scale(1.04); }
+}
+
+/* ---- TURTLE ---- */
+.turtle {
+  position: absolute;
+  left: 50%;
+  bottom: 56px; // vicina alla torta
+transform: translateX(-50%) translateY(42px) scale(0.85);
+  width: 160px;
+  height: 160px;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+
+  &.is-revealed {
+    opacity: 1;
+  }
+
+// shell sempre visibile
+&__shell {
+  position: absolute;
+  inset: 28px 18px 30px 18px;
+  border-radius: 70px;
+  background: linear-gradient(180deg, #3a9b5a, #1b6c3a);
+  box-shadow: inset 0 -10px 0 rgba(0,0,0,0.18), 0 18px 22px rgba(0,0,0,0.35);
+  z-index: 2;
+}
+
+  &__shellPattern {
+    position: absolute;
+    inset: 16px;
+    border-radius: 56px;
+    background:
+      radial-gradient(circle at 30% 35%, rgba(255,255,255,0.25), transparent 40%),
+      radial-gradient(circle at 70% 55%, rgba(0,0,0,0.15), transparent 45%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08) 8px, transparent 8px, transparent 16px);
+    opacity: 0.85;
+  }
+
+// body initially hidden (per "solo guscio" quando è rovesciata)
+&__body {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 450ms ease, transform 450ms ease;
+  z-index: 3;
+}
+
+  &.is-emerged {
+    .turtle__body {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__head {
+    position: absolute;
+    top: 42px;
+    left: 50%;
+    width: 58px;
+    height: 46px;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    background: linear-gradient(180deg, #62c07a, #2f8b4b);
+    box-shadow: inset 0 -7px 0 rgba(0,0,0,0.12);
+  }
+
+  &__eye {
+    position: absolute;
+    top: 14px;
+    width: 10px;
+    height: 14px;
+    border-radius: 8px;
+    background: #0c1220;
+    transform-origin: 50% 50%;
+
+    &--left  { left: 14px; }
+    &--right { right: 14px; }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.85);
+    }
+  }
+
+  &__mouth {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    width: 18px;
+    height: 10px;
+    transform: translateX(-50%);
+    border-radius: 0 0 12px 12px;
+    background: rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: opacity 250ms ease, height 250ms ease;
+  }
+
+  &.is-talking {
+    .turtle__mouth {
+      opacity: 1;
+      height: 14px;
+    }
+  }
+
+  &__arm {
+    position: absolute;
+    top: 84px;
+    width: 34px;
+    height: 18px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #62c07a, #2f8b4b);
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.12);
+
+    &--left  { left: 14px; transform: rotate(12deg); }
+    &--right { right: 14px; transform: rotate(-12deg); }
+  }
+
+  &__leg {
+    position: absolute;
+    bottom: 22px;
+    width: 34px;
+    height: 20px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #62c07a, #2f8b4b);
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.12);
+
+    &--left  { left: 38px; }
+    &--right { right: 38px; }
+  }
+
+// standing (su posteriori, emulazione umano-like)
+&.is-standing {
+  transform: translateX(-50%) translateY(42px) scale(0.85) rotate(-2deg);
+  animation: standUp 600ms cubic-bezier(.2,.9,.2,1) forwards;
+
+  .turtle__leg--left,
+  .turtle__leg--right {
+    bottom: 10px;
+    height: 26px;
+    border-radius: 18px;
+  }
+
+  .turtle__arm--right {
+    transform: rotate(-30deg) translateY(-2px);
+  }
+}
+
+// holding banner: alza zampa destra
+&.is-holdingBanner {
+  .turtle__arm--right {
+    transform: rotate(-55deg) translate(-2px, -6px);
+    transition: transform 420ms ease;
+  }
+}
+
+// Bubble
+.bubble {
+  position: absolute;
+  left: 50%;
+  top: -43px;
+  transform: translateX(-50%) translateY(10px);
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.92);
+  color: #131a2d;
+  font-weight: 650;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 16px 30px rgba(0,0,0,0.35);
+  transition: opacity 300ms ease, transform 300ms ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translateX(-50%) rotate(45deg);
+    background: rgba(255,255,255,0.92);
+    border-radius: 3px;
+  }
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+// Banner
+.banner {
+  position: absolute;
+  left: 50%;
+  bottom: -34px;
+  transform: translateX(-50%) translateY(8px) scale(0.98);
+  width: 190px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+  color: #0e1324;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.2px;
+  opacity: 0;
+  box-shadow: 0 18px 36px rgba(0,0,0,0.35);
+  transition: opacity 320ms ease, transform 320ms ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  &__text {
+    font-size: 14px;
+  }
+
+// Confetti containers
+.confetti {
+  position: absolute;
+  bottom: -6px;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+  opacity: 0;
+
+  span {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    border-radius: 3px;
+    transform: rotate(10deg);
+    opacity: 0.95;
+  }
+
+// colori vari (senza fissare palette troppo rigida)
+span:nth-child(1) { background: #ff79c6; }
+  span:nth-child(2) { background: #9b8cff; }
+  span:nth-child(3) { background: #ffd86b; }
+  span:nth-child(4) { background: #7ef; }
+  span:nth-child(5) { background: #b6ff7e; }
+  span:nth-child(6) { background: #ffb86c; }
+}
+
+  .confetti--left  { left: -50px; }
+  .confetti--right { right: -50px; }
+
+  &.do-confetti {
+    .confetti { opacity: 1; }
+    .confetti--left  span { animation: confettiBurst 900ms ease-out both; }
+    .confetti--right span { animation: confettiBurst 900ms ease-out both; }
+  }
+}
+
+// FLIPPED state: ruota guscio, nasconde body
+&.is-flipped {
+  transform: translateX(-50%) translateY(86px) scale(0.85) rotate(180deg);
+  .turtle__body { opacity: 0 !important; }
+}
+
+  &.is-upright {
+    transform: translateX(-50%) translateY(86px) scale(0.85);
+  }
+}
+
+/* --- Turtle keyframes --- */
+.turtle.anim-popFall {
+  animation: turtlePopFall 1400ms cubic-bezier(.15,.9,.2,1) forwards;
+}
+@keyframes turtlePopFall {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(42px) scale(0.8); }
+  18%  { opacity: 1; transform: translateX(-50%) translateY(-22px) scale(0.9); }
+  55%  { transform: translateX(-50%) translateY(44px) scale(0.88) rotate(180deg); }
+  100% { transform: translateX(-50%) translateY(86px) scale(0.85) rotate(180deg); }
+}
+
+.turtle.anim-righting {
+  animation: turtleRighting 900ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+@keyframes turtleRighting {
+  0%   { transform: translateX(-50%) translateY(86px) scale(0.85) rotate(180deg); }
+  100% { transform: translateX(-50%) translateY(86px) scale(0.85) rotate(0deg); }
+}
+
+@keyframes standUp {
+  0%   { transform: translateX(-50%) translateY(86px) scale(0.85) rotate(0deg); }
+  100% { transform: translateX(-50%) translateY(42px) scale(0.85) rotate(-2deg); }
+}
+
+/* Blink twice (occhi schiacciati 2 volte) */
+.turtle.do-blink {
+  .turtle__eye {
+    animation: blinkTwice 900ms ease-in-out forwards;
+  }
+}
+@keyframes blinkTwice {
+  0%, 8%    { transform: scaleY(1); }
+  12%, 18%  { transform: scaleY(0.1); }
+  22%, 38%  { transform: scaleY(1); }
+  44%, 50%  { transform: scaleY(0.1); }
+  56%, 100% { transform: scaleY(1); }
+}
+
+/* Confetti: dai lati inferiori del cartello verso la turtle (in alto e verso il centro) */
+@keyframes confettiBurst {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0.0; }
+  10%  { opacity: 1; }
+  100% { transform: translate(34px, -44px) rotate(220deg); opacity: 0; }
+}
+
+/* Distribuzione confetti (sinistra e destra con direzione verso centro) */
+.banner {
+  .confetti--left span {
+    &:nth-child(1) { left: 6px;  top: 46px; transform: rotate(20deg); }
+    &:nth-child(2) { left: 18px; top: 52px; transform: rotate(-10deg); }
+    &:nth-child(3) { left: 30px; top: 46px; transform: rotate(12deg); }
+    &:nth-child(4) { left: 10px; top: 34px; transform: rotate(-22deg); }
+    &:nth-child(5) { left: 26px; top: 36px; transform: rotate(18deg); }
+    &:nth-child(6) { left: 40px; top: 42px; transform: rotate(-6deg); }
+
+  // direzione verso la turtle: in alto e un po' verso destra (centro)
+  & { --dx: 34px; --dy: -44px; }
+  }
+
+  .confetti--right span {
+    &:nth-child(1) { right: 6px;  top: 46px; transform: rotate(20deg); }
+    &:nth-child(2) { right: 18px; top: 52px; transform: rotate(-10deg); }
+    &:nth-child(3) { right: 30px; top: 46px; transform: rotate(12deg); }
+    &:nth-child(4) { right: 10px; top: 34px; transform: rotate(-22deg); }
+    &:nth-child(5) { right: 26px; top: 36px; transform: rotate(18deg); }
+    &:nth-child(6) { right: 40px; top: 42px; transform: rotate(-6deg); }
+
+  // direzione verso la turtle: in alto e un po' verso sinistra (centro)
+  & { --dx: -34px; --dy: -44px; }
+  }
+
+// sovrascrivo la keyframe con variabili
+&.do-confetti {
+  .confetti--left span {
+    animation-name: confettiBurstLeft;
+  }
+  .confetti--right span {
+    animation-name: confettiBurstRight;
+  }
+}
+}
+
+@keyframes confettiBurstLeft {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0.0; }
+  10%  { opacity: 1; }
+  100% { transform: translate(34px, -44px) rotate(240deg); opacity: 0; }
+}
+@keyframes confettiBurstRight {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0.0; }
+  10%  { opacity: 1; }
+  100% { transform: translate(-34px, -44px) rotate(-240deg); opacity: 0; }
+}
+
+/* Responsive tweak */
+@media (max-width: 420px) {
+  .cake-wrap { transform: scale(0.92); }
+  .prompt-card { top: 18px; }
+}

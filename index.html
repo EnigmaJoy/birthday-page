@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buon Compleanno dolce Josh 🎂</title>
+  <link rel="stylesheet" href="./css/style.scss" />
+</head>
+
+<body>
+<main class="scene" aria-label="Scena auguri di compleanno">
+  <!-- Cartellino sopra la torta -->
+  <div class="prompt-card" id="promptCard" role="status" aria-live="polite">
+    <span id="promptText">Soffia le candeline</span>
+  </div>
+
+  <section class="stage" aria-hidden="false">
+    <!-- Torta -->
+    <div class="cake-wrap">
+      <div class="cake" id="cake" aria-label="Torta di compleanno">
+        <div class="cake-half cake-half--top"></div>
+        <div class="cake-half cake-half--bottom"></div>
+
+        <div class="candles" id="candles" aria-label="Candeline">
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+          <div class="candle"><div class="flame"></div></div>
+        </div>
+
+        <!-- decorazioni -->
+        <div class="icing"></div>
+        <div class="sprinkles"></div>
+      </div>
+
+      <!-- Tartarughina -->
+      <div class="turtle" id="turtle" aria-label="Tartarughina">
+        <div class="turtle__shell">
+          <div class="turtle__shellPattern"></div>
+        </div>
+
+        <div class="turtle__body">
+          <div class="turtle__head">
+            <div class="turtle__eye turtle__eye--left"></div>
+            <div class="turtle__eye turtle__eye--right"></div>
+            <div class="turtle__mouth"></div>
+          </div>
+
+          <div class="turtle__arm turtle__arm--left"></div>
+          <div class="turtle__arm turtle__arm--right"></div>
+
+          <div class="turtle__leg turtle__leg--left"></div>
+          <div class="turtle__leg turtle__leg--right"></div>
+        </div>
+
+        <!-- Nuvoletta messaggio -->
+        <div class="bubble" id="bubble">Ho qualcosa per te :)</div>
+
+        <!-- Cartello finale -->
+        <div class="banner" id="banner" aria-label="Cartello auguri">
+          <div class="banner__text">Happy bday dolce Josh!!</div>
+
+          <!-- confetti (generati via CSS su questi contenitori) -->
+          <div class="confetti confetti--left" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="confetti confetti--right" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Piano invisibile (solo logico) -->
+      <div class="floor" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <footer class="hint" aria-hidden="true">
+  </footer>
+</main>
+
+<script src="./js/app.js"></script>
+</body>
+</html>
